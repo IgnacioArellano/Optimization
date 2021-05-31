@@ -7,7 +7,7 @@ Timin =40;
 Timax =90;
 Pmut=0.02;
 flag_mut=0;
-Iterations=60;
+Iterations=3000;
 
 x=zeros(pobla,lon);
 for i=1:pobla
@@ -44,12 +44,12 @@ for itera=1:Iterations
     
     
 %     %%%% Ruleta selección
-%     CumP=cumsum(ProF)';
-%     %duplicamos la población
-%     dup = rand([pobla,1])';
-%     Rep = CumP<dup(:);
-%     Rep = sum(Rep,2)+1;
-%     Rpob = f(Rep);
+     CumP=cumsum(ProF)';
+     %duplicamos la población
+     dup = rand([pobla,1])';
+     Rep = CumP<dup(:);
+     Rep = sum(Rep,2)+1;
+     Rpob = f(Rep);
     
     
     

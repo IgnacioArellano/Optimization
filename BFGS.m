@@ -22,13 +22,13 @@ for i = 1:100
     if i==1
         grad_prev(1) = Dx1(x,delx);
         grad_prev(2) = Dx2(x,delx);
-        search_prev = -grad_prev;
+        search = -grad_prev;
         
-        [alpha,fx_prev] = seccion_dorada(x,search_prev ,xi,eps,U);
+        [alpha,fx_prev] = seccion_dorada(x,search ,xi,eps,U);
         if norm(grad_prev)<eps
             break;
         end
-        x_c = x + alpha*search_prev;
+        x_c = x + alpha*search;
         fprintf('%3d %8.3f %8.3f % 8.3f %8.3f \n',i, x_c ,fx_prev,norm(grad_prev))
     else
         
@@ -36,23 +36,22 @@ for i = 1:100
         grad_c(1) = Dx1(x_c,delx);
         grad_c(2) = Dx2(x_c,delx);
         deltag = grad_c-grad_prev;
-        
-        term1 = (deltax'*deltax)/(deltax*deltag');
-        term2 = (A*deltag'*deltag*A)/(deltag*A*deltag');
-        A = A + term1 - term2;
-        search = -A*grad_c';
+        term1 = (deltag'*deltag)/(deltag*deltax');
+        term2 = (grad_prev'*grad_prev)/(grad_prev*search');
+        A = A + term1 + term2;
+        search = -inv(A)*grad_c';
         [alpha,fx_c] = seccion_dorada(x_c,search' ,xi,eps,U);
         
         if abs(fx_c-fx_prev)<eps || norm(grad_c)<eps
             break;
         end
+         search= search';
         fx_prev = fx_c;
         grad_prev = grad_c;
         x=x_c;
-        x_c = x+alpha*search';
+        x_c = x+alpha*search;
         fprintf('%3d %8.3f %8.3f % 8.3f %8.3f \n',i,x_c,fx_c,norm(grad_c))
     end
-    inv(A)
 end
 fprintf('__________________________________________\n')
 %
