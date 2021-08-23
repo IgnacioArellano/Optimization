@@ -2,16 +2,11 @@ function Genetic_Algoritm_2D_test
 %% mínimo U(x*) = 0   x*=[0,0]
 U = @(x) 20 + x(1).^2 -10*cos (2*pi.*x(1))+ x(2).^2-10*cos(2*pi.*x(2));  % multimodal function
 U2 = @(x1,x2) 20 + x1.^2 -10*cos (2*pi.*x1)+ x2.^2-10*cos(2*pi.*x2);
-% [X1,X2]=meshgrid(-5.12:0.1:5.12,-5.12:0.1:5.12);
-% f=U2(X1,X2);
-% figure('color',[1 1 1]);
-% hold off
-% surfc(X1,X2,f),
-% shading interp
+
 
 %%initial parameters
 n_of_v=2;
-generation_max = 1000; % maximum number of generations
+generation_max = 1000000; % maximum number of generations
 size_popu = 30; % population size
 range(1,:) = [-5.12 5.12]; % variable bound
 range(2,:) = [-5.12 5.12];
@@ -143,3 +138,13 @@ for generation=1:generation_max
     genotype{2}=abs(mutacion(:,:,2)-genotype{2});
 
 end
+
+
+[X1,X2]=meshgrid(-5.12:0.1:5.12,-5.12:0.1:5.12);
+f=U2(X1,X2);
+figure('color',[1 1 1]);
+hold off
+surfc(X1,X2,f),
+shading interp
+hold on
+plot3(X_best_curr(1),X_best_curr(2),Fx_best_curr,'ro')
