@@ -1,4 +1,4 @@
-function powell_graph
+function paso_mas_descendente_graph
 
 %%%%función objetivo
 U = @(x)  100*(sqrt(x(1).^2  + (x(2)+1).^2) -1).^2 +   90*(sqrt(x(1).^2  + (x(2)+1).^2) -1).^2 - (20.*x(1) + 40.*x(2));
@@ -12,73 +12,39 @@ hold on
 plot3(-1,1,U([-1,1]),'ko', 'MarkerSize',10,'markerfacecolor',[0 0 0])
 plot3(0.5,0,U([0.5,0]),'ro', 'MarkerSize',10,'markerfacecolor',[1 0 0])
 
+%%%% Derivadas parciales para gradiente
+Dx1= @(x,delta)   (U([x(1)+delta,x(2)])- U([x(1)-delta,x(2)]))/ (2*delta);
+Dx2= @(x,delta)   (U([x(1),x(2)+delta])- U([x(1),x(2)-delta]))/ (2*delta);
+
 %%%% Condiciones iniciales
-eps=1e-10; % condicion de paro 1D
+delta=1e-3; % para derivada
+ep1=1e-5; % condicion de paro 1D
+ep2=1e-5; % condicion de paro 2D
 xi = [-1 1];
-x=xi;
+x = xi;
 fx_prev=U(x);
-fprintf('Initial function value = %7.4f\n ',fx_prev)
-fprintf(' No. x-vector f(x) \n')
-fprintf('__________________________________________\n')
 
-
-for i = 1:2
-    for j = 1:3
-        if (i==j)
-            term(i,j)=1;
-        else
-            term(i,j) = 0;
-        end
-    end
-end
-
-
-for i = 1: 2
-search{i} = (term(:,i))';
-end
-
-
-for ite = 1:20
-    xini = x;
-    i = 1;
-    while i<3
-        [alpha,fx] = seccion_dorada (x,search{i},xi,eps,U);
-        Si=search{i};
-        for j= 0:alpha/50:alpha
+for i = 1:3000
+    grad(1) = Dx1(x,delta);
+    grad(2) = Dx2(x,delta);
+    Si = -grad;
+    [alpha,falpha] = seccion_dorada(x,Si,xi,ep1,U);
+    for j= 0:alpha/10:alpha
             r=U(x+j*Si);
             xt=x+j*Si;
             plot3(xt(1),xt(2),r,'k.', 'MarkerSize',10,'markerfacecolor',[0 0 0])
-        end
-        
-        x = x + alpha*search{i};
-        i = i+1;
     end
-    
-    if abs(fx-fx_prev) < eps
+        
+    if abs(falpha-fx_prev)<ep2 || norm(grad)<ep2
         break;
     end
-    search{i} = (x-xini);
-    [alpha,fx] = seccion_dorada (x,search{i},xi,eps,U);
-    Si= search{i};
-    for j= 0:alpha/20:alpha
-        r=U(x+j*Si);
-        xt=x+j*Si;
-        plot3(xt(1),xt(2),r,'c.', 'MarkerSize',10,'markerfacecolor',[0 0 0])
-    end
-    x = x + alpha*search{i};
-    temp = search;
-    for i = 1:2
-        search{i} = temp{i+1};
-    end
-    fx_prev = fx;
-    fprintf('%3d %8.3f %8.3f %8.3f\n',ite, x ,fx_prev)
-    
-end
-fprintf('__________________________________________\n')
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    fx_prev = falpha;
+    x = x + alpha*Si;
+    fprintf('%3d %8.3f %8.3f % 8.3f %8.3f \n',i,x,falpha,norm(grad))
 end
 
+fprintf('__________________________________________\n')
+end
 
 function [alpha1,falpha1]=seccion_dorada (x,Si,lims,ep1,U)
 

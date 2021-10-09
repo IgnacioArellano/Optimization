@@ -11,7 +11,7 @@ Dx2= @(x,delta)   (U([x(1),x(2)+delta])- U([x(1),x(2)-delta]))/ (2*delta);
 
 %%%% Condiciones iniciales
 delx=1e-3; % para derivada
-eps=1e-3; % condicion de paro 1D
+eps=1e-10; % condicion de paro 1D
 xi = [-1 1];
 x = xi;
 A=eye(length(x));
