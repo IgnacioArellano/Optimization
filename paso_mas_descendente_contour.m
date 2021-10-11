@@ -31,9 +31,9 @@ for i = 1:3000
     [alpha,falpha] = seccion_dorada(x,Si,xi,ep1,U);
     for j= 0:alpha/10:alpha
             xt=x+j*Si;
-            plot(xt(1),xt(2),'k.', 'MarkerSize',10,'markerfacecolor',[0 0 0])
+           % plot([x(1),xt(1)],[x(2),xt(2)],'k.', 'MarkerSize',10,'markerfacecolor',[0 0 0])
     end
-        
+    plot([x(1),xt(1)],[x(2),xt(2)],'k')   
     if abs(falpha-fx_prev)<ep2 || norm(grad)<ep2
         break;
     end
