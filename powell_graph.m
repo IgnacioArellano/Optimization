@@ -44,7 +44,7 @@ for ite = 1:20
     while i<3
         [alpha,fx] = seccion_dorada (x,search{i},xi,eps,U);
         Si=search{i};
-        for j= 0:alpha/50:alpha
+        for j= 0:alpha/30:2.5*alpha
             r=U(x+j*Si);
             xt=x+j*Si;
             plot3(xt(1),xt(2),r,'k.', 'MarkerSize',10,'markerfacecolor',[0 0 0])

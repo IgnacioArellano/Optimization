@@ -29,7 +29,7 @@ for i = 1:3000
     grad(2) = Dx2(x,delta);
     Si = -grad;
     [alpha,falpha] = seccion_dorada(x,Si,xi,ep1,U);
-    for j= 0:alpha/10:alpha
+    for j= 0:alpha/20:alpha
             r=U(x+j*Si);
             xt=x+j*Si;
             plot3(xt(1),xt(2),r,'k.', 'MarkerSize',10,'markerfacecolor',[0 0 0])
